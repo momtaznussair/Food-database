@@ -64,12 +64,13 @@ Food database - filters
 
             <div class="card-header pb-0">
 
-                <form action="#" method="POST" autocomplete="off">
+                <form action="{{route('filter')}}" method="POST" autocomplete="off">
                     @csrf
                     <div class="row mb-3">
                         {{-- Diet rating --}}
                         <div class="col-lg-4 mg-b-20 mg-lg-b-0">
-                            <p class="mg-b-10">Diet Rating</p><select class="form-control select2" multiple="multiple">
+                            <p class="mg-b-10">Diet Rating <span class="text-danger"> *</span></p>
+                            <select class="form-control select2" multiple="multiple" id="diet_ratings" name="diet_ratings[]" required>
                                 @foreach ($rates as $rate)
                                 <option value="{{$rate->id}}">
                                     {{$rate->name}}
@@ -77,9 +78,10 @@ Food database - filters
                                 @endforeach
                             </select>
                         </div>
-                        
+                        {{-- diets --}}
                         <div class="col-lg-4 mg-b-20 mg-lg-b-0">
-                            <p class="mg-b-10">Individual Diet</p><select class="form-control select2" multiple="multiple">
+                            <p class="mg-b-10">Individual Diet <span class="text-danger"> *</span></p>
+                            <select class="form-control select2" id="diets" multiple="multiple" name="diets[]" required>
                                 @foreach ($diets as $diet)
                                 <option value="{{$diet->id}}">
                                     {{$diet->name}}
@@ -91,8 +93,8 @@ Food database - filters
                      {{-- toxin rating --}}
                      <div class="row">
                         <div class="col-lg-4 mg-b-20 mg-lg-b-0">
-                            <p class="mg-b-10">Toxin Rating</p>
-                            <select class="form-control select2" multiple="multiple">
+                            <p class="mg-b-10">Toxin Rating <span class="text-danger"> *</span></p>
+                            <select class="form-control select2" multiple="multiple" id="toxin_ratings" name="toxin_ratings[]" required>
                                 @foreach ($rates as $rate)
                                 <option value="{{$rate->id}}">
                                     {{$rate->name}}
@@ -100,12 +102,12 @@ Food database - filters
                                 @endforeach
                             </select>
                         </div>
-                        
+                        {{-- toxins --}}
                         <div class="col-lg-4 mg-b-20 mg-lg-b-0">
-                            <p class="mg-b-10">Individual Toxin</p>
-                            <select class="form-control select2" multiple="multiple">
+                            <p class="mg-b-10">Individual Toxin <span class="text-danger"> *</span></p>
+                            <select class="form-control select2" multiple="multiple" id="toxins" name="toxins[]" required>
                                 @foreach ($toxins as $toxin)
-                                <option value="{{$toxin->id}}">
+                                <option value="{{$toxin->id}}" >
                                     {{$toxin->name}}
                                 </option>    
                                 @endforeach
@@ -113,11 +115,11 @@ Food database - filters
                         </div>         
                     </div>
 
-                    {{-- <div class="row">
-                        <div class="col-sm-1 col-md-1">
-                            <button class="btn btn-primary btn-block">Search</button>
+                    <div class="row">
+                        <div class="col-sm-1 col-md-1 mt-3 ml-1">
+                            <button type='submit' class="btn btn-danger btn-block">Search</button>
                         </div>
-                    </div> --}}
+                    </div>
                 </form>
 
             </div>
@@ -130,30 +132,28 @@ Food database - filters
                                     <th class="border-bottom-0">Food name</th>
                                     <th class="border-bottom-0 text-center">Rating</th>
                             <tbody>
+                                @foreach ($foods as $food)
                                 <tr>
-                                    <td>1</td>
-                                    <td>Apples</td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$food->name}}</td>
+                                    @php
+                                        $min = $food->min ?? min([$food->toxins->pluck('pivot')->pluck('rate_id')->min(),
+                                         $food->diets->pluck('pivot')->pluck('rate_id')->min()])
+                                    @endphp
+
                                     <td class="text-center">
-                                        <span class="badge badge-pill badge-success">Safe</span>
+                                        @if ($min == 4)
+                                            <span class="badge badge-pill badge-success p-1">Safe</span>
+                                            @elseif ($min == 3)
+                                            <span class="badge badge-pill badge-info p-1">Uncertain</span>
+                                            @elseif ($min == 2)
+                                            <span class="badge badge-pill badge-warning p-1">Moderate</span>
+                                            @else
+                                            <span class="badge badge-pill badge-danger p-1">Avoid</span>
+                                        @endif
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Apricots</td>
-                                    <td class="text-center">
-                                        <span class="badge badge-pill badge-info">Uncertain</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Artichokes Jerusalem</td>
-                                    <td class="text-center"><span class="badge badge-pill badge-warning">Moderate</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Barley</td>
-                                    <td class="text-center"><span class="badge badge-pill badge-danger">Avoid</span></td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                 </div>
@@ -212,50 +212,31 @@ Food database - filters
     }).val();
 </script>
 
-<script>
-    $(document).ready(function() {
-
-        $('select[name="section"]').on('change', function() {
-            let SectionId = $(this).val();
-            console.log(SectionId);
-            if (SectionId) {
-                $.ajax({
-                    url: "{{ URL::to('section') }}/" + SectionId,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        @if (old('section'))
-                            $('select[name="product"]').empty();
-                            $('select[name="product"]').append('<option value="all" selected>الكل</option>');
-                        @endif
-                        $.each(data, function(key, value) {
-                            $('select[name="product"]').append(
-                                '<option value="' +
-                                value.id + '">' + value.product_name +
-                                '</option>');
-                        });
-                    },
-                });
-            } else {
-                console.log('AJAX load did not work');
-            }
-        });
-
-        // error message for section
-        $('form').on('submit', function(){
-            section = $('select[name="section"]').val();
-            if(!section)
-            {
-                notif({
-                    msg: "<strong>يرجى أختيار القسم</strong>",
-                    type: "error"
-                })
-
-                return false;
-            }
-        })
-    });
-</script>
-
+@isset($old)
+{{-- selecting old diets --}}
+@foreach ($old->diets as $diet)
+    <script>
+        $('#diets option[value="{{$diet}}"]').prop('selected', true);
+    </script>
+@endforeach
+{{-- selecting old diet ratings --}}
+@foreach ($old->diet_ratings as $rate)
+    <script>
+        $('#diet_ratings option[value="{{$rate}}"]').prop('selected', true);
+    </script>
+@endforeach
+{{-- selecting old toxins --}}
+@foreach ($old->toxins as $toxin)
+    <script>
+        $('#toxins option[value="{{$toxin}}"]').prop('selected', true);
+    </script>
+@endforeach
+{{-- selecting old toxin ratings --}}
+@foreach ($old->toxin_ratings as $rate)
+    <script>
+        $('#toxin_ratings option[value="{{$rate}}"]').prop('selected', true);
+    </script>
+@endforeach
+@endisset
 
 @endsection

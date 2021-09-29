@@ -84,26 +84,26 @@
                                                 <td class="w-25 align-middle">
                                                     @foreach ($food->diets as $diet)
                                                         @if ($diet->pivot->rate_id == 1)
-                                                            <span class="badge badge-pill bg-danger text-light">{{$diet->name}}</span>
+                                                            <span class="badge badge-pill bg-danger text-light p-1">{{$diet->name}}</span>
                                                         @elseif ($diet->pivot->rate_id == 2)
-                                                            <span class="badge badge-pill bg-warning text-light">{{$diet->name}}</span>
+                                                            <span class="badge badge-pill bg-warning text-light p-1">{{$diet->name}}</span>
                                                         @elseif ($diet->pivot->rate_id == 3)
-                                                            <span class="badge badge-pill bg-info text-light">{{$diet->name}}</span>
+                                                            <span class="badge badge-pill bg-info text-light p-1">{{$diet->name}}</span>
                                                         @elseif ($diet->pivot->rate_id == 4)
-                                                            <span class="badge badge-pill bg-success text-light">{{$diet->name}}</span>
+                                                            <span class="badge badge-pill bg-success text-light p-1">{{$diet->name}}</span>
                                                         @endif
                                                     @endforeach
                                                 </td>
                                                 <td class="w-25 align-middle">
                                                     @foreach ($food->toxins as $toxin)
                                                         @if ($toxin->pivot->rate_id == 1)
-                                                            <span class="badge badge-pill bg-danger text-light">{{$toxin->name}}</span>
+                                                            <span class="badge badge-pill bg-danger text-light p-1">{{$toxin->name}}</span>
                                                         @elseif ($toxin->pivot->rate_id == 2)
-                                                            <span class="badge badge-pill bg-warning text-light">{{$toxin->name}}</span>
+                                                            <span class="badge badge-pill bg-warning text-light p-1">{{$toxin->name}}</span>
                                                         @elseif ($toxin->pivot->rate_id == 3)
-                                                            <span class="badge badge-pill bg-info text-light">{{$toxin->name}}</span>
+                                                            <span class="badge badge-pill bg-info text-light p-1">{{$toxin->name}}</span>
                                                         @elseif ($toxin->pivot->rate_id == 4)
-                                                            <span class="badge badge-pill bg-success text-light">{{$toxin->name}}</span>
+                                                            <span class="badge badge-pill bg-success text-light p-1">{{$toxin->name}}</span>
                                                         @endif
                                                     @endforeach
                                                 </td>

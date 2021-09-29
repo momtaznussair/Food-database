@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Diet;
 use App\Models\Toxin;
+use App\Models\FoodToxin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -18,7 +19,8 @@ class Food extends Model
 
     public function toxins()
     {
-        return $this->belongsToMany(Toxin::class)->withPivot('rate_id')->withTimestamps();
+        return $this->belongsToMany(Toxin::class)->withPivot('rate_id')->using(FoodToxin::class)
+        ->withTimestamps();
     }
     
     protected $fillable = [

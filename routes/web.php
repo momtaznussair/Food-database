@@ -18,7 +18,7 @@ use App\Http\Controllers\ToxinController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('/');
 
 // diets
 Route::resource('diets', DietController::class);
@@ -28,7 +28,4 @@ Route::resource('toxins', ToxinController::class);
 
 // food
 Route::resource('foods', FoodController::class);
-
-//admin
-Route::get('/{page}', [AdminController::class, "index"]);
-
+Route::post('filter', [HomeController::class, 'filter'])->name('filter');
