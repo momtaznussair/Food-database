@@ -6,7 +6,12 @@ use App\Http\Controllers\FoodController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ToxinController;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\URL;
 
+if (App::environment('production')) {
+    URL::forceScheme('https');
+}
 /*
 |--------------------------------------------------------------------------
 | Web Routes
