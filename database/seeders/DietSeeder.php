@@ -14,7 +14,7 @@ class DietSeeder extends Seeder
      */
     public function run()
     {
-        $diets = ['AIP', 'GAPS', 'Wahls', 'Whole30', 'Gluten Free', 'Casein Free', 'SCD', 'FailSafe', 'Histamine Free', 'Keto'];
+        $diets = ['AIP', 'GAPS', 'WAHLS', 'WHOLE30', 'FODMAP', 'GLUTEN FREE', 'CASEIN FREE', 'SCD', 'FAILSAFE (RPAH DIET)', 'HISTAMINE FREE', 'KETO'];
         foreach($diets as $diet)
         {
             Diet::create([

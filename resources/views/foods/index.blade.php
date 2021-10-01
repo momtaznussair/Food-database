@@ -62,6 +62,13 @@
 									<div class="col-sm-6 col-md-4 col-xl-3">
 										<a class="btn btn-outline-primary btn-block"  href="{{route('foods.create')}}">Add New Food Item</a>
 									</div>
+									<div class="col-sm-6 col-md-4 col-xl-3">
+										<form action="{{route('import')}}" method="post" enctype="multipart/form-data">
+											@csrf
+											<button class="btn btn-sm btn-success mb-1 ml-3" type="submit">Import</button>
+											<input class="form-control" type="file" name="file" id="file" required>
+										</form>
+									</div>
 								</div>
 							</div>
 							<div class="card-body">

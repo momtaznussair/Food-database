@@ -14,7 +14,7 @@ class ToxinSeeder extends Seeder
      */
     public function run()
     {
-        $toxins = ['Oxalates', 'Trypsin', 'Isoflavones', 'Polyphenol', 'Saponins', 'Salicylates', 'Phytate', 'Lectins', 'Flavinoids', 'Histamine', 'Glucosinolates', 'Tannins', 'Nightshades', 'Glycemic Index', 'Glycoalkaloids'];
+        $toxins = ['OXALATES', 'TRYPSIN', 'ISOFLAVONES ', 'POLYPHENOLS', 'SAPONINS', 'SALICYLATES', 'PHYTATE', 'LECTINS', 'FLAVINOIDS', 'GLUCOSINOLATES', 'TANNINS', 'HISTAMINE', 'NIGHTSHADES', 'GLYCEMIC INDEX', 'GLYCOALKALOIDS'];
         foreach($toxins as $toxin)
         {
             Toxin::create([

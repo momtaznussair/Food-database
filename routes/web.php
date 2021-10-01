@@ -34,3 +34,7 @@ Route::resource('toxins', ToxinController::class);
 // food
 Route::resource('foods', FoodController::class);
 Route::post('filter', [HomeController::class, 'filter'])->name('filter');
+Route::post('import', [FoodController::class, 'import'])->name('import');
+
+// pages
+Route::get('/{page}', [AdminController::class, "index"]);

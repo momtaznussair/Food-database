@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\FoodsImport;
 use App\Models\Diet;
 use App\Models\Food;
 use App\Models\Rate;
 use App\Models\Toxin;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FoodController extends Controller
 {
@@ -132,4 +134,11 @@ class FoodController extends Controller
 
         return back()->withSuccess('Food Item Deleted Successfully!');
     }
+
+    public function import(Request $request)
+    {
+        Excel::import(new FoodsImport(), $request->file);
+        return back()->withSuccess('File Imported Successfully!');
+    }
+
 }
