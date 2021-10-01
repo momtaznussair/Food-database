@@ -59,10 +59,10 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<div class="col-sm-6 col-md-4 col-xl-3">
+									{{-- <div class="col-sm-6 col-md-4 col-xl-3">
 										<a class="btn btn-outline-primary btn-block"  href="{{route('foods.create')}}">Add New Food Item</a>
 									</div>
-									{{-- <div class="col-sm-6 col-md-4 col-xl-3">
+									<div class="col-sm-6 col-md-4 col-xl-3">
 										<form action="{{route('import')}}" method="post" enctype="multipart/form-data">
 											@csrf
 											<button class="btn btn-sm btn-success mb-1 ml-3" type="submit">Import</button>
@@ -80,7 +80,7 @@
 												<th class="border-bottom-0">Name</th>
 												<th class="border-bottom-0 w-25">Diets</th>
 												<th class="border-bottom-0 w-25">Toxins</th>
-												<th class="border-bottom-0">Operations</th>
+												{{-- <th class="border-bottom-0">Operations</th> --}}
 											</tr>
 										</thead>
 										<tbody>
@@ -114,7 +114,7 @@
                                                         @endif
                                                     @endforeach
                                                 </td>
-												<td class="align-middle">
+												{{-- <td class="align-middle">
 													<a class="btn btn-sm btn-info" href="{{route('foods.edit', $food->id)}}" title="Edit">
                                                     <i class="las la-pen"></i></a>
 
@@ -122,7 +122,7 @@
 													data-id="{{ $food->id }}" data-food_name="{{ $food->name }}"
 													data-toggle="modal" href="#modaldemo9" title="Delete"><i
 														class="las la-trash"></i></a>
-												</td>
+												</td> --}}
 											</tr>
 											@endforeach
 										</tbody>
