@@ -28,13 +28,13 @@ class FoodController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function create()
-    // {
-    //     $diets = Diet::all();
-    //     $toxins = Toxin::all();
-    //     $rates = Rate::all();
-    //     return view('foods.store', ['rates' => $rates, 'diets' => $diets, 'toxins' => $toxins]);
-    // }
+    public function create()
+    {
+        $diets = Diet::all();
+        $toxins = Toxin::all();
+        $rates = Rate::all();
+        return view('foods.store', ['rates' => $rates, 'diets' => $diets, 'toxins' => $toxins]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,24 +42,24 @@ class FoodController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255|unique:foods,name',
-    //         'diets.*' => 'exists:rates,id',
-    //         'diets' => 'required|array',
-    //         'toxins.*' => 'exists:rates,id',
-    //         'toxins' => 'required|array',
-    //     ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:foods,name',
+            'diets.*' => 'exists:rates,id',
+            'diets' => 'required|array',
+            'toxins.*' => 'exists:rates,id',
+            'toxins' => 'required|array',
+        ]);
 
-    //     $food_item = Food::create($request->all());
-    //     $food_item->diets()->sync($this->mapRatings($request->diets));
-    //     $food_item->toxins()->sync($this->mapRatings($request->toxins));
+        $food_item = Food::create($request->all());
+        $food_item->diets()->sync($this->mapRatings($request->diets));
+        $food_item->toxins()->sync($this->mapRatings($request->toxins));
 
-    //     return redirect('foods')->withSuccess('Food Item added successfully');
+        return redirect('foods')->withSuccess('Food Item added successfully');
 
 
-    // }
+    }
 
     /**
      * Display the specified resource.
@@ -78,16 +78,16 @@ class FoodController extends Controller
      * @param  \App\Models\Food  $food
      * @return \Illuminate\Http\Response
      */
-    // public function edit(Food $food)
-    // {
-    //     $diets = Diet::all();
-    //     $toxins = Toxin::all();
-    //     $rates = Rate::all();
-    //     $current_diets = $food->diets->pluck('id');
-    //     $current_toxins = $food->toxins->pluck('id');
-    //     return view('foods.update', ['rates' => $rates, 'diets' => $diets, 'toxins' => $toxins,
-    //      'food' => $food, 'current_diets' => $current_diets, 'current_toxins' => $current_toxins]);
-    // }
+    public function edit(Food $food)
+    {
+        $diets = Diet::all();
+        $toxins = Toxin::all();
+        $rates = Rate::all();
+        $current_diets = $food->diets->pluck('id');
+        $current_toxins = $food->toxins->pluck('id');
+        return view('foods.update', ['rates' => $rates, 'diets' => $diets, 'toxins' => $toxins,
+         'food' => $food, 'current_diets' => $current_diets, 'current_toxins' => $current_toxins]);
+    }
 
     // /**
     //  * Update the specified resource in storage.
@@ -96,29 +96,29 @@ class FoodController extends Controller
     //  * @param  \App\Models\Food  $food
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function update(Request $request, Food $food)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255|unique:foods,name,'.$food->id,
-    //         'diets.*' => 'exists:rates,id',
-    //         'diets' => 'required|array',
-    //         'toxins.*' => 'exists:rates,id',
-    //         'toxins' => 'required|array',
-    //     ]);
+    public function update(Request $request, Food $food)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:foods,name,'.$food->id,
+            'diets.*' => 'exists:rates,id',
+            'diets' => 'required|array',
+            'toxins.*' => 'exists:rates,id',
+            'toxins' => 'required|array',
+        ]);
 
-    //     $food->update($request->all());
-    //     $food->diets()->sync($this->mapRatings($request->diets));
-    //     $food->toxins()->sync($this->mapRatings($request->toxins));
+        $food->update($request->all());
+        $food->diets()->sync($this->mapRatings($request->diets));
+        $food->toxins()->sync($this->mapRatings($request->toxins));
 
-    //     return redirect('foods')->withSuccess('Food Item updated successfully');
-    // }
+        return redirect('foods')->withSuccess('Food Item updated successfully');
+    }
 
-    // private function mapRatings($ratings)
-    // {
-    //     return collect($ratings)->map(function ($rate) {
-    //         return ['rate_id' => $rate];
-    //     });
-    // }   
+    private function mapRatings($ratings)
+    {
+        return collect($ratings)->map(function ($rate) {
+            return ['rate_id' => $rate];
+        });
+    }   
 
     // /**
     //  * Remove the specified resource from storage.
@@ -126,19 +126,19 @@ class FoodController extends Controller
     //  * @param  \App\Models\Food  $food
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function destroy(Food $food)
-    // {
-    //     $food->diets()->detach();
-    //     $food->toxins()->detach();
-    //     $food->delete();
+    public function destroy(Food $food)
+    {
+        $food->diets()->detach();
+        $food->toxins()->detach();
+        $food->delete();
 
-    //     return back()->withSuccess('Food Item Deleted Successfully!');
-    // }
+        return back()->withSuccess('Food Item Deleted Successfully!');
+    }
 
-    // public function import(Request $request)
-    // {
-    //     Excel::import(new FoodsImport(), $request->file);
-    //     return back()->withSuccess('File Imported Successfully!');
-    // }
+    public function import(Request $request)
+    {
+        Excel::import(new FoodsImport(), $request->file);
+        return back()->withSuccess('File Imported Successfully!');
+    }
 
 }

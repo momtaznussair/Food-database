@@ -56,39 +56,61 @@ class HomeController extends Controller
             'toxins' => 'required|array|min:1',
         ]);
 
-        // filter by diets
-        $foods = Food::whereHas('diets', function($q) {
-            global $request;
-            $q->whereIn('diet_id', $request->diets)->whereIn('rate_id', $request->diet_ratings);
-        })
-        // filter by toxins
-        ->whereHas('toxins', function($q) {
-            global $request;
-            $q->whereIn('toxin_id', $request->toxins)->whereIn('rate_id', $request->toxin_ratings);
-        })
-        ->with('diets', 'toxins')
-        ->get();
+        
 
-        // getting the minimum rate in (diets and toxins) filters in foods that matchs 
+        // filter by diets rates
+        $filtered_foods = [];
+        foreach ($request->diet_ratings as $rate) {
+            $foods = Food::select();
+            foreach ($request->diets as $diet) {
+
+            $foods->whereHas('diets', function ($query) use($diet, $request, $rate) {
+                $query->where('id', $diet)->where('rate_id', $rate);
+            });
+            }
+            $filtered_foods[] = $foods->get();
+        }
+
+        $filtered_by_diets = Arr::collapse($filtered_foods);
+
+       // filter by toxins rates
+       $filtered_foods = [];
+       foreach ($request->toxin_ratings as $rate) {
+           $foods = Food::select();
+           foreach ($request->toxins as $toxin) {
+
+           $foods->whereHas('toxins', function ($query) use($toxin, $request, $rate) {
+               $query->where('id', $toxin)->where('rate_id', $rate);
+           });
+           }
+           $filtered_foods[] = $foods->get();
+       }
+
+        $filtered_by_toxins = Arr::collapse($filtered_foods);
+
+        // getting the food items that satisfy the diet filters and the toxins filters
+        $foods = collect($filtered_by_diets)->intersect($filtered_by_toxins);
+        
+        // getting the minimum rate in (diets and toxins) filters in foods that matchs
         foreach ($foods as  $food) {
-          $food['min'] = min([
-            // minimum rate in diets  that match with diet filter
-            $food->diets->filter(function($diet){
-                global $request;
-                return in_array($diet->id, $request->diets);
-            })->pluck('pivot')->pluck('rate_id')->min(),
-            // minimum rate in toxins that match with toxin filter  
-            $food->toxins->filter(function($toxin){
-                global $request;
-                return in_array($toxin->id, $request->toxins);
-            })->pluck('pivot')->pluck('rate_id')->min(),
-          ]);
+            $food['min'] = min([
+
+                // minimum rate in diets  that match with diet filter
+                $food->diets->filter(function ($diet) use($request) {
+                    return in_array($diet->id, $request->diets);
+                })->pluck('pivot')->pluck('rate_id')->min(),
+
+                // minimum rate in toxins that match with toxin filter  
+                $food->toxins->filter(function ($toxin) use($request){
+                    return in_array($toxin->id, $request->toxins);
+                })->pluck('pivot')->pluck('rate_id')->min(),
+            ]);
         }
 
         $diets = Diet::all();
         $toxins = Toxin::all();
         $rates = Rate::all();
-        
+
         return view('home', ['rates' => $rates, 'diets' => $diets, 'toxins' => $toxins, 'foods' => $foods, 'old' => $request]);
     }
 }
