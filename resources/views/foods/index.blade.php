@@ -58,7 +58,7 @@
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
-								<div class="d-flex justify-content-between">
+								{{-- <div class="d-flex justify-content-between">
 									
 									<div class="col-sm-6 col-md-4 col-xl-3">
 										<form action="{{route('import')}}" method="post" enctype="multipart/form-data">
@@ -67,7 +67,7 @@
 											<input class="form-control" type="file" name="file" id="file" required>
 										</form>
 									</div>
-								</div>
+								</div> --}}
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
@@ -111,7 +111,7 @@
                                                             <span class="badge badge-pill bg-success text-light p-1">{{$toxin->name}}</span>
                                                         @endif
                                                     @endforeach
-                                                </td>
+                                                {{-- </td>
 												<td class="align-middle">
 													<a class="btn btn-sm btn-info" href="{{route('foods.edit', $food->id)}}" title="Edit">
                                                     <i class="las la-pen"></i></a>
@@ -120,7 +120,7 @@
 													data-id="{{ $food->id }}" data-food_name="{{ $food->name }}"
 													data-toggle="modal" href="#modaldemo9" title="Delete"><i
 														class="las la-trash"></i></a>
-												</td>
+												</td> --}}
 											</tr>
 											@endforeach
 										</tbody>
