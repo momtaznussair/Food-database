@@ -137,8 +137,9 @@ Food database - filters
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$food->name}}</td>
                                     @php
-                                        $min = $food->min ?? min([$food->toxins->pluck('pivot')->pluck('rate_id')->min(),
-                                         $food->diets->pluck('pivot')->pluck('rate_id')->min()])
+                                        $min = $food->min ?? ''
+                                        // min([$food->toxins->pluck('pivot')->pluck('rate_id')->min(),
+                                        //  $food->diets->pluck('pivot')->pluck('rate_id')->min()])
                                     @endphp
 
                                     <td class="text-center">
@@ -148,8 +149,10 @@ Food database - filters
                                             <span class="badge badge-pill badge-info p-1">Uncertain</span>
                                             @elseif ($min == 2)
                                             <span class="badge badge-pill badge-warning p-1">Moderate</span>
-                                            @else
+                                            @elseif ($min == 1)
                                             <span class="badge badge-pill badge-danger p-1">Avoid</span>
+                                            @else
+                                            <span>----</span>
                                         @endif
                                     </td>
                                 </tr>
